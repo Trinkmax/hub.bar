@@ -1,26 +1,105 @@
 @import "tailwindcss";
 
+@theme {
+  /* HUB! brand palette */
+  --color-hub-cream: #faf4e6;
+  --color-hub-cream-soft: #f4ead4;
+  --color-hub-forest-50: #e4ece7;
+  --color-hub-forest-100: #c7d9cd;
+  --color-hub-forest-200: #9bbaa6;
+  --color-hub-forest-300: #6a9a7d;
+  --color-hub-forest-500: #2d6a4f;
+  --color-hub-forest-700: #1b4332;
+  --color-hub-forest-900: #0f2a1e;
+  --color-hub-orange-300: #f0a37f;
+  --color-hub-orange-500: #e76f51;
+  --color-hub-orange-700: #b84a2f;
+  --color-hub-ink: #111111;
+  --color-hub-ink-soft: #383838;
+  --color-hub-slate: #667085;
+
+  /* Status colors */
+  --color-status-free: #94a3b8;
+  --color-status-occupied: #2d6a4f;
+  --color-status-aging: #d97706;
+  --color-status-ready: #dc2626;
+
+  --font-display: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+  --background: var(--color-hub-cream);
+  --foreground: var(--color-hub-ink);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html, body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior-y: contain;
+  touch-action: manipulation;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Big tap targets on mobile */
+@media (max-width: 768px) {
+  button, [role="button"] {
+    min-height: 44px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Safe area support */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .pb-safe {
+    padding-bottom: max(env(safe-area-inset-bottom), 0.75rem);
+  }
+  .pt-safe {
+    padding-top: max(env(safe-area-inset-top), 0.75rem);
+  }
 }
+
+/* Scrollbar subtle */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 999px; }
+
+/* Numeric keypad buttons */
+.keypad-btn {
+  @apply flex items-center justify-center text-3xl font-semibold rounded-2xl bg-white/90 text-hub-forest-700 shadow-sm active:scale-95 active:bg-white transition;
+  aspect-ratio: 1 / 1;
+  min-height: 72px;
+}
+
+/* Table status chip */
+.table-chip {
+  @apply relative flex flex-col items-center justify-center rounded-xl font-bold text-white shadow-md select-none transition-transform;
+  touch-action: none;
+}
+
+.table-chip[data-status="free"] { background: #94a3b8; }
+.table-chip[data-status="occupied"] { background: var(--color-hub-forest-500); }
+.table-chip[data-status="bill"] { background: var(--color-hub-orange-500); }
+.table-chip[data-status="closed"] { background: #4b5563; }
+
+/* Soft card */
+.card-soft {
+  @apply bg-white/85 backdrop-blur rounded-2xl shadow-sm ring-1 ring-hub-forest-100;
+}
+
+/* Scrollbar-hidden horizontal scroll */
+.scroll-x-hidden-bar::-webkit-scrollbar { display: none; }
+.scroll-x-hidden-bar { scrollbar-width: none; }
