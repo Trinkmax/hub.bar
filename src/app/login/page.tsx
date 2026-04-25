@@ -1,6 +1,9 @@
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { readSessionFromCookies } from "@/lib/auth/session";
 import { PinKeypad } from "./pin-keypad";
+
+export const dynamic = "force-dynamic";
 
 export default async function LoginPage() {
   const s = await readSessionFromCookies();
@@ -15,11 +18,30 @@ export default async function LoginPage() {
         <p className="text-sm text-hub-slate mb-10 tracking-wide uppercase">
           Comandas · Mozos
         </p>
-        <PinKeypad />
+        <Suspense fallback={<KeypadSkeleton />}>
+          <PinKeypad />
+        </Suspense>
       </div>
       <footer className="absolute bottom-6 text-xs text-hub-slate">
         v0.1 · hecho con calma
       </footer>
     </main>
+  );
+}
+
+function KeypadSkeleton() {
+  return (
+    <div className="w-full flex flex-col items-center">
+      <div className="flex gap-3 mb-8">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="w-4 h-4 rounded-full ring-2 ring-hub-forest-100 bg-white" />
+        ))}
+      </div>
+      <div className="grid grid-cols-3 gap-3 w-full max-w-[18rem]">
+        {Array.from({ length: 11 }).map((_, i) => (
+          <div key={i} className="keypad-btn opacity-50" />
+        ))}
+      </div>
+    </div>
   );
 }
